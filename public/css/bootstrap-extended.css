@@ -1,0 +1,15 @@
+.input-success-dark {
+    border: none;
+    color: #fff;
+    background-color: #13603d;
+}
+.text-justify {
+    text-align: justify;
+}
+
+.rounded-top-right, .rounded-right-side {
+    border-top-right-radius: 5px;
+}
+.rounded-bottom-right, .rounded-right-side {
+    border-bottom-right-radius: 5px;
+}
