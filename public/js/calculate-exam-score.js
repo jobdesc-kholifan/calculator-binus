@@ -45,6 +45,9 @@ CalculateExamScore.prototype._configureOnlyNumber = function(selector) {
         if(!$next.is('small') && !$next.data('helper'))
             $helper.insertAfter($item);
 
+        if($item.data('default') !== undefined)
+            $item.val($item.data('default'));
+
         $item.on('keypress keydown keyup', (event) => {
 
             if($item.attr('max') !== undefined) {

@@ -8,4 +8,19 @@
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
     }
+    .final-score {
+        display: none;
+    }
+    .calculate-score {
+        padding-bottom: 0!important;
+    }
+}
+.final-score {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #13603d;
+}
+.calculate-score {
+    padding-bottom: 40px;
 }
