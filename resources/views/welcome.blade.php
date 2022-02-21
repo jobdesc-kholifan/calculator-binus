@@ -26,10 +26,10 @@
                                 <div class="w-100 text-center" style="font-size: 12px">Minggu</div>
                                 <div class="row gx-1 mb-2">
                                     @for($i = 1; $i <= 10; $i++)
-                                        <div class="col-3 col-md-2 col-xl-1">
+                                        <div class="col-3 col-md-2 col-xl-2">
                                             <label for="input-nilai-forum" class="mb-1 small w-100 text-center">{{ $i }}</label>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 id="input-nilai-forum"
                                                 class="form-control form-control-lg"
                                                 data-score="forum"
@@ -45,7 +45,7 @@
                                     <div class="col-6 col-sm-4">
                                         <label for="input-nilai-attandance" class="mb-1 small">Kehadiran</label>
                                         <input
-                                            type="text"
+                                            type="number"
                                             id="input-nilai-attandance"
                                             class="form-control form-control-lg"
                                             data-score="attendance"
@@ -55,7 +55,7 @@
                                     <div class="col-6 col-sm-4">
                                         <label for="input-total-attandance" class="mb-1 small">Total Kelas</label>
                                         <input
-                                            type="text"
+                                            type="number"
                                             id="input-total-attandance"
                                             class="form-control form-control-lg"
                                             data-score="total-attendance"
@@ -74,7 +74,7 @@
                                         <div class="col-6 col-sm-6">
                                             <label for="input-nilai-quiz" class="mb-1 small">Nilai {{ $i }}</label>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 id="input-nilai-quiz"
                                                 class="form-control form-control-lg"
                                                 data-score="quiz"
@@ -91,7 +91,7 @@
                                         <div class="col-6 col-sm-6">
                                             <label for="input-nilai-pas" class="mb-1 small">Nilai {{ $i }}</label>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 id="input-nilai-pas"
                                                 class="form-control form-control-lg"
                                                 data-score="pas"
@@ -108,7 +108,7 @@
                                         <div class="col-6 col-sm-3">
                                             <label for="input-nilai-tas" class="mb-1 small">Nilai {{ $i }}</label>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 id="input-nilai-tas"
                                                 class="form-control form-control-lg"
                                                 data-score="tas"
@@ -130,7 +130,7 @@
                         <div class="mb-3">
                             <label for="input-nilai-akhir" class="mb-1 small text-white">Nilai Akhir</label>
                             <input
-                                type="text"
+                                type="number"
                                 id="input-nilai-akhir"
                                 class="form-control form-control-lg input-success-dark"
                                 data-score="final-score"
