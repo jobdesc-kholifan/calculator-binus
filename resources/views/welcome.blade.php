@@ -225,7 +225,7 @@
         </div>
     </div>
     <div class="final-score shadow p-2">
-        <small class="text-white mb-0" style="font-size: 12px">Nilai UAS</small>
+        <small class="text-white mb-0" style="font-size: 12px" data-label="score">Nilai UAS</small>
         <h4 class="mb-0 text-white" data-label="final-score">0</h4>
     </div>
 </div>

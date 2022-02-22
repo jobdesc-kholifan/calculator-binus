@@ -14,7 +14,8 @@ const $elSelectors = {
         quiz: '[data-label=quiz]',
         pas: '[data-label=pas]',
         tas: '[data-label=tas]',
-        finalScore: '[data-label=final-score]'
+        finalScore: '[data-label=final-score]',
+        score: '[data-label=score]'
     },
 };
 
@@ -117,6 +118,24 @@ CalculateExamScore.prototype._scoreDefault = function(selector) {
     }).get();
 };
 
+CalculateExamScore.prototype._scoreGrade = function(score) {
+    const $elGradeScore = this.$.find($elSelectors.score.grade);
+    const options = $elGradeScore.find('option');
+
+    let grade = 'F';
+    for(let i = 0; i < options.length; i++) {
+        const $item = $(options[i]);
+        const value = parseInt($item.val());
+
+        if(score >= value) {
+            grade = $item.text();
+            break;
+        }
+    }
+
+    return grade;
+};
+
 CalculateExamScore.prototype._renderForum = function() {
     const scoreForum = this._scoreForum().toFixed(2);
 
@@ -196,61 +215,76 @@ CalculateExamScore.prototype._run = function() {
     const $note = this.$.find('[data-label=note-score]');
     const $noteTotal = this.$.find('[data-label=note-total]');
     const $finalScore = this.$.find('[data-label=final-score]');
+    const $lblScore = this.$.find('[data-label=score]');
+
+    $result.empty();
+    $note.empty();
+    $finalScore.empty();
+    $noteTotal.empty();
 
     if(finalScore > totalScore) {
         const scoreExam = (finalScore - totalScore) / 0.3;
         $result.empty();
 
-        $result.append(
-            $('<div>', {class: 'text-white'}).append(
-                $('<div>', {class: 'd-flex align-items-start'}).append(
-                    $('<span>').html('='),
-                    $('<div>', {class: 'px-1'}).html(
-                        finalScore + ' - ( ' + scoreForum + ' + ' + scoreAttendance + ' + ' + scoreQuiz + ' + ' + scorePAS + ' + ' + scoreTAS + ' ) / 30%'
+        if(scoreExam <= 100) {
+            $result.append(
+                $('<div>', {class: 'text-white'}).append(
+                    $('<div>', {class: 'd-flex align-items-start'}).append(
+                        $('<span>').html('='),
+                        $('<div>', {class: 'px-1'}).html(
+                            finalScore + ' - ( ' + scoreForum + ' + ' + scoreAttendance + ' + ' + scoreQuiz + ' + ' + scorePAS + ' + ' + scoreTAS + ' ) / 30%'
+                        )
                     )
-                )
-            ).css({fontSize: 14})
-        );
+                ).css({fontSize: 14})
+            );
 
-        $result.append(
-            $('<div>', {class: 'text-white'}).append(
-                $('<div>', {class: 'd-flex align-items-start'}).append(
-                    $('<span>').html('='),
-                    $('<div>', {class: 'px-1'}).html(
-                        finalScore + ' - ' + totalScore.toFixed(2) + ' / 30%'
+            $result.append(
+                $('<div>', {class: 'text-white'}).append(
+                    $('<div>', {class: 'd-flex align-items-start'}).append(
+                        $('<span>').html('='),
+                        $('<div>', {class: 'px-1'}).html(
+                            finalScore + ' - ' + totalScore.toFixed(2) + ' / 30%'
+                        )
                     )
-                )
-            ).css({fontSize: 14})
-        );
+                ).css({fontSize: 14})
+            );
 
-        $result.append(
-            $('<div>', {class: 'text-white'}).append(
-                $('<div>', {class: 'd-flex align-items-start'}).append(
-                    $('<span>').html('='),
-                    $('<div>', {class: 'px-1'}).html(
-                        (finalScore - totalScore).toFixed(2) + ' / 30%'
+            $result.append(
+                $('<div>', {class: 'text-white'}).append(
+                    $('<div>', {class: 'd-flex align-items-start'}).append(
+                        $('<span>').html('='),
+                        $('<div>', {class: 'px-1'}).html(
+                            (finalScore - totalScore).toFixed(2) + ' / 30%'
+                        )
                     )
-                )
-            ).css({fontSize: 14})
-        );
+                ).css({fontSize: 14})
+            );
 
-        $result.append(
-            $('<div>', {class: 'text-white mb-3'}).append(
-                $('<div>', {class: 'd-flex align-items-start'}).append(
-                    $('<span>').html('='),
-                    $('<div>', {class: 'px-1'}).html(scoreExam.toFixed(2))
-                )
-            ).css({fontSize: 14})
-        );
+            $result.append(
+                $('<div>', {class: 'text-white mb-3'}).append(
+                    $('<div>', {class: 'd-flex align-items-start'}).append(
+                        $('<span>').html('='),
+                        $('<div>', {class: 'px-1'}).html(scoreExam.toFixed(2))
+                    )
+                ).css({fontSize: 14})
+            );
 
-        $note.html("Jika anda menginginkan nilai akhir " + finalScore + ", nilai UAS yang harus anda dapatkan adalah")
-        $finalScore.html(scoreExam.toFixed(2));
-        $noteTotal.html("jika anda tidak mengikuti UAS, anda akan mendapatkan nilai <b>" + totalScore.toFixed(2) + "</b>");
-    } else {
-        $result.empty();
-        $note.empty();
-        $finalScore.empty();
-        $noteTotal.empty();
+            $lblScore.html("Untuk dapat nilai akhir <b>" + finalScore.toFixed(2)  + " (" + this._scoreGrade(finalScore) + ")</b>, nilai UAS harus:");
+            $note.html("Jika anda menginginkan nilai akhir <b>" + finalScore.toFixed(2)  + " (" + this._scoreGrade(finalScore) + ")</b> , nilai UAS yang harus anda dapatkan adalah")
+            $finalScore.html(scoreExam.toFixed(2));
+            $noteTotal.html("Apabila anda tidak mengikuti UAS, anda akan mendapatkan nilai <b>" + totalScore.toFixed(2) + " (" + this._scoreGrade(totalScore) + ")</b>");
+        } else {
+            const maxScore = totalScore + 30;
+            $lblScore.html("Maksimal nilai akhir jika nilai UAS <b>100.00</b>");
+            $note.html("Jika nilai UAS anda mendapat <b>100.00</b>, maksimal nilai akhir yang bisa anda dapatkan adalah:");
+            $finalScore.html(maxScore.toFixed(2) + " (" + this._scoreGrade(maxScore) + ")");
+            $noteTotal.html("Nilai akhir diambil dari total score Forum, Attendance, Quiz, PAS (Personal Assignment) dan TAS (Team Assignment) ditambah dengan 30% Nilai UAS, jika tidak mengikuti UAS anda mendapatkan nilai <b>" + totalScore.toFixed(2) + " (" + this._scoreGrade(totalScore) + ")</b>")
+        }
+    } else if(totalScore >= finalScore) {
+        $lblScore.html("Nilai Akhir (Tanpa UAS)");
+        $note.html("Jika anda tidak mengikuti UAS, nilai akhir anda adalah");
+        $finalScore.html(totalScore.toFixed(2) + " (" + this._scoreGrade(totalScore) + ")");
+        $noteTotal.html("Nilai akhir diambil dari total score Forum, Attendance, Quiz, PAS (Personal Assignment) dan TAS (Team Assignment)")
     }
 
     setTimeout(() => this._run(), 500);
