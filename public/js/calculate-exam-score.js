@@ -5,7 +5,8 @@ const $elSelectors = {
         quiz: '[data-score=quiz]',
         pas: '[data-score=pas]',
         tas: '[data-score=tas]',
-        finalScore: '[data-score=final-score]'
+        finalScore: '[data-score=final-score]',
+        grade: '[data-score=grade]'
     },
     label: {
         forum: '[data-label=forum]',
@@ -66,8 +67,8 @@ CalculateExamScore.prototype._configureOnlyNumber = function(selector) {
     });
 };
 
-CalculateExamScore.prototype._scoreForum = function() {
-    const posts = this.$.find($elSelectors.score.forum).map(function(i, item) {
+CalculateExamScore.prototype._scoresForum = function() {
+    return this.$.find($elSelectors.score.forum).map(function(i, item) {
         const $item = $(item);
         if($item.val() !== '') {
             const countPost = parseInt($item.val());
@@ -79,18 +80,25 @@ CalculateExamScore.prototype._scoreForum = function() {
 
         return 0;
     }).get();
-
-    return 100/(posts.length*2) * posts.reduce((a, b) => a + b, 0);
 };
 
-CalculateExamScore.prototype._scoreAttendance = function() {
-    const attendances = this.$.find($elSelectors.score.attendance).map(function(i, item) {
+CalculateExamScore.prototype._scoresAttendance = function() {
+    return this.$.find($elSelectors.score.attendance).map(function(i, item) {
         const $item = $(item);
         if($item.val() !== '')
             return parseInt($item.val());
 
         return 0;
     }).get();
+};
+
+CalculateExamScore.prototype._scoreForum = function() {
+    const posts = this._scoresForum();
+    return 100/(posts.length*2) * posts.reduce((a, b) => a + b, 0);
+};
+
+CalculateExamScore.prototype._scoreAttendance = function() {
+    const attendances = this._scoresAttendance();
 
     let totalSession = 6;
     if(this.$.find('[data-score=total-attendance]').val() !== '')
@@ -130,7 +138,7 @@ CalculateExamScore.prototype._renderDefault = function(index, percentage) {
     const score = scores.reduce((a, b) => a + b, 0).toFixed(2)/scores.length;
 
     const $label = this.$.find($elSelectors.label[index]);
-    $label.find('[data-note]').html('(' + scores.join(' + ') + ')' + ' x ' + percentage + '%');
+    $label.find('[data-note]').html('(' + scores.join(' + ') + ') / ' + scores.length + ' x ' + percentage + '%');
     $label.find('[data-value]').html((score * percentage/100).toFixed(2));
 };
 
@@ -156,9 +164,33 @@ CalculateExamScore.prototype._run = function() {
     const totalScore = scoreForum + scoreAttendance + scoreQuiz + scorePAS + scoreTAS;
     this.$.find('[data-label=total-score]').html(totalScore.toFixed(2));
 
+    const $elFinalScore = this.$.find($elSelectors.score.finalScore);
+    const $elGradeScore = this.$.find($elSelectors.score.grade);
+
     let finalScore = 0;
-    if(this.$.find($elSelectors.score.finalScore).val() !== '')
-        finalScore = parseFloat(this.$.find($elSelectors.score.finalScore).val());
+    if($elFinalScore.val() !== '')
+        finalScore = parseFloat($elFinalScore.val());
+
+    $elFinalScore.on('keypress keydown keyup', function() {
+        const score = parseFloat(this.value);
+        const options = $elGradeScore.find('option');
+
+        if(!isNaN(score)) {
+            for(let i = 0; i < options.length; i++) {
+                const $item = $(options[i]);
+                const value = parseInt($item.attr('value'));
+
+                if(score >= value) {
+                    $elGradeScore.val(value);
+                    break;
+                }
+            }
+        } else $elGradeScore.val(-1);
+    });
+
+    $elGradeScore.change(function() {
+        $elFinalScore.val(this.value);
+    });
 
     const $result = this.$.find('[data-label=result]');
     const $note = this.$.find('[data-label=note-score]');

@@ -19,7 +19,7 @@
                 <div class="col-sm-8 bg-white">
                     <div class="px-2 py-4 px-sm-3 px-xl-4 py-sm-4">
                         <h5>Hitung Nilai UAS</h5>
-                        <p class="small text-justify">Untuk menghitung berapa nilai UAS yang harus didapatkan berdasarkan nilai forum, attendance, quiz, PAS dan TAS</p>
+                        <p class="small text-justify">Untuk menghitung berapa nilai UAS yang harus didapatkan berdasarkan nilai forum, attendance, quiz, PAS (Personal Assignment) dan TAS (Team Assignment)</p>
                         <div class="row">
                             <div class="col-12 col-md-12 col-xl-10">
                                 <div class="mb-3">
@@ -52,6 +52,7 @@
                                                 class="form-control form-control-lg"
                                                 data-score="attendance"
                                                 max="100"
+                                                data-default="6"
                                             />
                                         </div>
                                         <div class="col-6 col-sm-4">
@@ -119,6 +120,7 @@
                                             </div>
                                         @endfor
                                     </div>
+                                    <small>Nilai Quiz, PAS (Personal Assignment) dan TAS (Team Assigment) dapat dilihat di <a href="https://ol.binus.ac.id" target="_blank" tabindex="-1">LMS</a> di halaman <i>Assignment & Quiz</i></small>
                                 </div>
                             </div>
                         </div>
@@ -131,12 +133,36 @@
                         <div class="">
                             <div class="mb-3">
                                 <label for="input-nilai-akhir" class="mb-1 small text-white">Nilai Akhir</label>
-                                <input
-                                    type="number"
-                                    id="input-nilai-akhir"
-                                    class="form-control form-control-lg input-success-dark"
-                                    data-score="final-score"
-                                />
+                                <div class="row">
+                                    <div class="col-6 col-sm-8">
+                                        <input
+                                            type="number"
+                                            id="input-nilai-akhir"
+                                            class="form-control form-control-lg input-success-dark"
+                                            data-score="final-score"
+                                        />
+                                    </div>
+                                    <div class="col-6 col-sm-4">
+                                        <label for="select-grade" class="d-none"></label>
+                                        <select
+                                            class="form-control form-control-lg input-success-dark"
+                                            id="select-grade"
+                                            data-score="grade"
+                                        >
+                                            <option value="">Grade Nilai</option>
+                                            <option value="90">A</option>
+                                            <option value="85">A-</option>
+                                            <option value="80">B+</option>
+                                            <option value="75">B</option>
+                                            <option value="70">B-</option>
+                                            <option value="65">C</option>
+                                            <option value="50">D</option>
+                                            <option value="0">E</option>
+                                            <option value="-1">F</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <small class="text-white">Detail grade nilai dapat dilihat di <a href="https://curriculum.binus.ac.id/binus-online-learning-2/2/" class="text-white" target="_blank">Grading System Binus</a></small>
                             </div>
                             <div class="mb-2 text-white d-flex justify-content-between align-items-center" data-label="forum">
                                 <div>
